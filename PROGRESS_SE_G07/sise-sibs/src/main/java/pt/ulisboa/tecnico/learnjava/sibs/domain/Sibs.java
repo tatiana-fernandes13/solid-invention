@@ -11,6 +11,7 @@ import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
 public class Sibs {
 	final Operation[] operations;
 	Services services;
+	Operation operation;
 
 	private static Set<TransferOperation> transferOperationSet = new HashSet<TransferOperation>();
 
@@ -54,18 +55,14 @@ public class Sibs {
 				break;
 			}
 		}
-
 		if (position == -1) {
 			throw new SibsException();
 		}
-
-		Operation operation;
 		if (type.equals(Operation.OPERATION_TRANSFER)) {
-			operation = new TransferOperation(sourceIban, targetIban, value);
+			this.operation = new TransferOperation(sourceIban, targetIban, value);
 		} else {
-			operation = new PaymentOperation(targetIban, value);
+			this.operation = new PaymentOperation(targetIban, value);
 		}
-
 		this.operations[position] = operation;
 		return position;
 	}

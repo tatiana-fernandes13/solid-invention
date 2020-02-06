@@ -66,20 +66,14 @@ public abstract class Account {
 	}
 
 	public void inactive(CheckingAccount checking) throws AccountException {
-		if (this.isInactive()) {
+		if (this.isInactive() || checking != null && this.client != checking.getClient()) {
 			throw new AccountException();
 		}
-
-		if (checking != null && this.client != checking.getClient()) {
-			throw new AccountException();
-		}
-
 		if (this.balance > 0) {
 			checking.deposit(this.balance);
 		} else if (this.balance < 0) {
 			checking.withdraw(-this.balance);
 		}
-
 		this.inactive = true;
 		this.balance = 0;
 	}
