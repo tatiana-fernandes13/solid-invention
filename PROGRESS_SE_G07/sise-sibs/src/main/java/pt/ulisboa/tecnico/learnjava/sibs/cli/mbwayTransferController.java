@@ -7,20 +7,18 @@ import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
 
 public class mbwayTransferController {
-	Services services;
-	Sibs sibs;
+	Services services = new Services();
+	Sibs sibs = new Sibs(100, services);
 
+//	implementação da guideline 1
 	public void mbway_transfer(String sourcePhoneNumber, String targetPhoneNumber, String amount)
 			throws SibsException, AccountException, OperationException {
-		services = new Services();
-		sibs = new Sibs(100, services);
 		if (MbWay.mbWayClients.containsKey(sourcePhoneNumber) && MbWay.mbWayClients.containsKey(targetPhoneNumber)) {
-			int value = Integer.parseInt(amount);
 			String sourceIban = MbWay.mbWayClients.get(sourcePhoneNumber);
 			String targetIban = MbWay.mbWayClients.get(targetPhoneNumber);
 			if (services.getAccountByIban(sourceIban).getClient().getMbwayState().equals("Active")
 					&& services.getAccountByIban(targetIban).getClient().getMbwayState().equals("Active")) {
-				sibs.transfer(sourceIban, targetIban, value);
+				sibs.transfer(sourceIban, targetIban, Integer.parseInt(amount));
 				sibs.processOperations();
 				System.out.println("Transfer successful!");
 			} else {
