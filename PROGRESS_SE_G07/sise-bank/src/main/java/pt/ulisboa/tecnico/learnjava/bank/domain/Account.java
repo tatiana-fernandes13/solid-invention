@@ -42,26 +42,16 @@ public abstract class Account {
 	}
 
 	public void deposit(int amount) throws AccountException {
-		if (this.inactive) {
-			throw new AccountException(amount);
-		}
-
-		if (amount <= 0) {
+		if (this.inactive || amount <= 0) {
 			throw new AccountException(amount);
 		}
 		this.balance = this.balance + amount;
-
 	}
 
 	public void withdraw(int amount) throws AccountException {
-		if (this.inactive) {
+		if (this.inactive || amount <= 0) {
 			throw new AccountException(amount);
 		}
-
-		if (amount <= 0) {
-			throw new AccountException();
-		}
-
 		this.balance = this.balance - amount;
 	}
 

@@ -55,19 +55,8 @@ public class Client {
 	}
 
 	private void checkParameters(Bank bank, String nif, String phoneNumber, int age) throws ClientException {
-		if (age < 0) {
-			throw new ClientException();
-		}
-
-		if (nif.length() != 9 || !nif.matches("[0-9]+")) {
-			throw new ClientException();
-		}
-
-		if (phoneNumber.length() != 9 || !phoneNumber.matches("[0-9]+")) {
-			throw new ClientException();
-		}
-
-		if (bank.getClientByNif(nif) != null) {
+		if (age < 0 || nif.length() != 9 || !nif.matches("[0-9]+") || phoneNumber.length() != 9
+				|| !phoneNumber.matches("[0-9]+") || bank.getClientByNif(nif) != null) {
 			throw new ClientException();
 		}
 	}
