@@ -5,7 +5,6 @@ import pt.ulisboa.tecnico.learnjava.bank.services.Services;
 public class confirmMbwayController {
 
 	public void confirm_mbway(Services services, String phoneNumber, String code) {
-		services = new Services();
 		if (MbWay.mbWayClients.containsKey(phoneNumber)) {
 			if (services.getAccountByIban(MbWay.mbWayClients.get(phoneNumber)).getClient().getMbwayCode().toString()
 					.equals(code)) {
