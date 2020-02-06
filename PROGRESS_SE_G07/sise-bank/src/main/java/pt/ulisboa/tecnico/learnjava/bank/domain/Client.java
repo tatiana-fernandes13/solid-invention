@@ -11,20 +11,21 @@ import pt.ulisboa.tecnico.learnjava.bank.exceptions.ClientException;
 public class Client {
 	private final Set<Account> accounts = new HashSet<Account>();
 
-	private final Bank bank;
-	private final String firstName;
-	private final String lastName;
-	private final String nif;
-	private final String phoneNumber;
-	private final String address;
+	private Bank bank;
+	private String firstName;
+	private String lastName;
+	private String nif;
+	private String phoneNumber;
+	private String address;
 	private int age;
 	public Integer mbwayCode;
 	String mbwayState;
+	private IdCard IdCard;
 
 	public Client(Bank bank, String firstName, String lastName, String nif, String phoneNumber, String address, int age)
 			throws ClientException {
-		checkParameters(bank, nif, phoneNumber, age);
-
+		checkAgeAndNif(nif, age);
+		checkBankAndPhoneNumber(bank, phoneNumber);
 		this.bank = bank;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -35,6 +36,14 @@ public class Client {
 		this.mbwayCode = null;
 		this.mbwayState = "Inactive";
 
+		bank.addClient(this);
+	}
+
+	public Client(Bank bank, IdCard IdCard) {
+		this.bank = bank;
+		this.IdCard = IdCard;
+		this.mbwayCode = null;
+		this.mbwayState = "Inactive";
 		bank.addClient(this);
 	}
 
@@ -54,9 +63,14 @@ public class Client {
 		this.mbwayCode = mbwayCode;
 	}
 
-	private void checkParameters(Bank bank, String nif, String phoneNumber, int age) throws ClientException {
-		if (age < 0 || nif.length() != 9 || !nif.matches("[0-9]+") || phoneNumber.length() != 9
-				|| !phoneNumber.matches("[0-9]+") || bank.getClientByNif(nif) != null) {
+	public void checkBankAndPhoneNumber(Bank bank, String phoneNumber) throws ClientException {
+		if (phoneNumber.length() != 9 || !phoneNumber.matches("[0-9]+") || bank.getClientByNif(nif) != null) {
+			throw new ClientException();
+		}
+	}
+
+	private void checkAgeAndNif(String nif, int age) throws ClientException {
+		if (age < 0 || phoneNumber.length() != 9 || !phoneNumber.matches("[0-9]+")) {
 			throw new ClientException();
 		}
 	}
