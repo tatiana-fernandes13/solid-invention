@@ -15,14 +15,7 @@ public class Withdrawn extends state {
 			}
 			Retry.clearCount();
 		} catch (AccountException accountException) {
-			sibs.services.deposit(operation.getSourceIban(), operation.getValue());
-			Retry.addCount();
-			if (Retry.getCount() == 4) {
-				operation.setStatus(new Error());
-				Retry.clearCount();
-			} else {
-				operation.setStatus(new Retry(operation, this));
-			}
+			catchProcess(sibs, operation);
 		}
 	}
 

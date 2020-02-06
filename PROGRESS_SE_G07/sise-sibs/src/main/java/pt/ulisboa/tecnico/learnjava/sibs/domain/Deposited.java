@@ -11,15 +11,8 @@ public class Deposited extends state {
 			operation.setStatus(new Completed());
 			Retry.clearCount();
 		} catch (AccountException AccountException) {
-			sibs.services.deposit(operation.getSourceIban(), operation.getValue());
+			catchProcess(sibs, operation);
 			sibs.services.withdraw(operation.getTargetIban(), operation.getValue());
-			Retry.addCount();
-			if (Retry.getCount() == 4) {
-				operation.setStatus(new Error());
-				Retry.clearCount();
-			} else {
-				operation.setStatus(new Retry(operation, this));
-			}
 		}
 	}
 
