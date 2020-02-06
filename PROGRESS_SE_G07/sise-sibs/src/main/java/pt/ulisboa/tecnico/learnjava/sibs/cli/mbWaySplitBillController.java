@@ -14,8 +14,9 @@ public class mbWaySplitBillController {
 	HashMap<String, String> friendsMap;
 	String targetIban;
 	String targetPhoneNumber;
-	Sibs sibs;
+	Sibs sibs = new Sibs(100, services);
 	mbwayTransferController mbwayTransferController = new mbwayTransferController();
+	int totalAmount = 0;
 
 	public String friend(String PhoneNumber, String amount) {
 		if (MbWay.mbWayClients.containsKey(PhoneNumber)) {
@@ -38,21 +39,17 @@ public class mbWaySplitBillController {
 
 	public void mbwaySplitBill(String numberOfFriends, String amount)
 			throws SibsException, AccountException, OperationException {
-		sibs = new Sibs(100, services);
-		int totalAmount = 0;
-		int nrFriends = Integer.parseInt(numberOfFriends);
-		int value = Integer.parseInt(amount);
-		if (this.friendsMap.size() > nrFriends) {
+		if (this.friendsMap.size() > Integer.parseInt(numberOfFriends)) {
 			System.out.println("Oh no! Too many friends.");
 			return;
-		} else if (this.friendsMap.size() < nrFriends) {
+		} else if (this.friendsMap.size() < Integer.parseInt(numberOfFriends)) {
 			System.out.println("Oh no! One friend is missing.");
 			return;
 		} else {
 			for (String val : this.friendsMap.values()) {
 				totalAmount += Integer.parseInt(val);
 			}
-			if (value == totalAmount) {
+			if (Integer.parseInt(amount) == totalAmount) {
 				for (String phoneNumber : this.friendsMap.keySet()) {
 					Account account = (services.getAccountByIban(MbWay.mbWayClients.get(phoneNumber)));
 					if (account.getBalance() < Integer.parseInt(this.friendsMap.get(phoneNumber))) {
