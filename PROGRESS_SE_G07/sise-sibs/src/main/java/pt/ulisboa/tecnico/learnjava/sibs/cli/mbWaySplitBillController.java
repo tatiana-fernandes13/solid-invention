@@ -37,7 +37,7 @@ public class mbWaySplitBillController {
 		}
 	}
 
-	public void checkAmount() throws SibsException, AccountException, OperationException {
+	public void checkBalance() throws SibsException, AccountException, OperationException {
 		for (String phoneNumber : this.friendsMap.keySet()) {
 			Account account = (services.getAccountByIban(MbWay.mbWayClients.get(phoneNumber)));
 			if (account.getBalance() < Integer.parseInt(this.friendsMap.get(phoneNumber))) {
@@ -47,6 +47,15 @@ public class mbWaySplitBillController {
 				mbwayTransferController.mbway_transfer(phoneNumber, targetPhoneNumber,
 						this.friendsMap.get(phoneNumber));
 			}
+		}
+	}
+
+	public void checkAmount(String amount) throws SibsException, AccountException, OperationException {
+		if (Integer.parseInt(amount) == totalAmount) {
+			this.checkBalance();
+			System.out.println("Bill payed successfully!");
+		} else {
+			System.out.println("Something is wrong. Did you set the bill amount right?");
 		}
 	}
 
@@ -60,13 +69,7 @@ public class mbWaySplitBillController {
 			return;
 		} else {
 			int totalAmount = this.friendsMap.values().stream().mapToInt(v -> Integer.parseInt(v)).sum();
-			if (Integer.parseInt(amount) == totalAmount) {
-				this.checkAmount();
-				System.out.println("Bill payed successfully!");
-			} else {
-				System.out.println("Something is wrong. Did you set the bill amount right?");
-				return;
-			}
+			this.checkAmount(amount);
 		}
 	}
 }
