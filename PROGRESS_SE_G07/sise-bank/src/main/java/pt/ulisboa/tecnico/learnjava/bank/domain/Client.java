@@ -70,7 +70,7 @@ public class Client {
 	}
 
 	private void checkAgeAndNif(String nif, int age) throws ClientException {
-		if (age < 0 || phoneNumber.length() != 9 || !phoneNumber.matches("[0-9]+")) {
+		if (age < 0 || nif.length() != 9 || !nif.matches("[0-9]+")) {
 			throw new ClientException();
 		}
 	}
